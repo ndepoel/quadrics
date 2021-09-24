@@ -1,0 +1,19 @@
+Benchmarking using "data/1vqm_vdw.sql" on 1024x768, counting fps and instructions of sphere_fp.cg
+
+Initial: 
+82 (77.91 fps)
+
+x_e -> x_p through mul(x_e,MT_IT): 
+66 (78.05 fps)
+
+Manual x_w -> x_e through unproj_scale/offset:
+53 (107.37 fps)
+
+saturate() for Phong instead of max():
+52 (107.89 fps)
+
+Vertex shader optimization of M_IT * T_IT:
+vp 52 => 35
+
+Use b/2 to solve quadratic equation:
+49 (107.76 fps)

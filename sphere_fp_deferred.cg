@@ -1,0 +1,68 @@
+const float4 diag = { 1, 1, 1, -1 };
+
+struct Input
+{
+    float3 color    : COLOR;
+    float2 wpos     : WPOS;
+    float4x4 MT_IT  : TEXCOORD0;
+};
+
+struct Output
+{
+    float depth     : DEPTH;
+    float4 surface  : COLOR0;
+    float4 color    : COLOR1;
+};
+
+void main(  Input input,
+            uniform float2 unproj_scale,
+            uniform float2 unproj_offset,
+            uniform float near,
+            uniform float zb_scale,
+			uniform float zb_offset,
+			uniform float3 lightpos,
+            out Output output )
+{
+    /*
+    ==========
+    Our method
+    ==========
+    */
+    // Fragment position in eye space
+    float4 frg_e = float4( input.wpos * unproj_scale - unproj_offset, -near, 1 );
+
+    // Eye- and fragment positions in parameter space, derive the ray direction
+    float4 eye_p = input.MT_IT[3];
+    float4 frg_p = mul( frg_e, input.MT_IT );
+    float4 ray_p = frg_p - eye_p;
+
+    // Solve the quadratic equation
+    float3 eqn;
+    eqn.x = dot( ray_p * diag, ray_p );
+    eqn.y = dot( eye_p * diag, ray_p ); // = b/2
+    eqn.z = dot( eye_p * diag, eye_p );
+    
+	eqn /= eqn.x;	// eqn = (1, b/2a, c/a)
+
+    // Discard non-intersecting rays
+    float discr = eqn.y*eqn.y - eqn.z;
+    if ( discr < 0 )
+        discard;
+
+    // Finish solving the equation
+    float mu = -eqn.y - sqrt(discr);
+
+    // Normal equals position in parameter space, use it to compute the eye-space normal
+	float3 nrm_p = eye_p.xyz + mu * ray_p.xyz;
+	float3 nrm_e = normalize( mul( input.MT_IT, float4( nrm_p.xyz, 0 ) ).xyz );
+
+    // Derive the eye-space intersection point
+    float pos_e_z = mu * frg_e.z;
+
+    // Store the corresponding depth value
+    output.depth = zb_scale / pos_e_z + zb_offset;
+
+    output.surface.xyz = nrm_e;
+    output.surface.w = mu;
+    output.color.rgb = input.color;
+}

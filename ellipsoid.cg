@@ -1,0 +1,66 @@
+const float4 D = { 1, 1, 1, -1 };
+
+void main(float4 center         : POSITION,
+          float3 color          : TEXCOORD0,
+          float3 uvec           : TEXCOORD1,
+          float3 vvec           : TEXCOORD2,
+          float3 wvec           : TEXCOORD3,
+          uniform float4x4 ModelView,
+          uniform float4x4 ModelViewIT,
+          uniform float4x4 ModelViewProj,
+          uniform float2 wsize,
+          uniform float near,
+          uniform float top,
+          uniform float bottom,
+          out float4 pout		: POSITION,
+          out float psize		: PSIZE,
+          out float3 cout		: TEXCOORD0
+          )
+{
+    float4x4 T = 
+        { 
+            float4( uvec, 0 ), 
+            float4( vvec, 0 ), 
+            float4( wvec, 0 ), 
+            center
+        };
+    float4x4 PMT = ModelViewProj;   // Assume T is identity
+//        mul( ModelViewProj, transpose( T ) );  // This is probably not the right order...
+
+    float4 r1 = PMT[0];
+    float4 r2 = PMT[1];
+    float4 r3 = PMT[2];
+    float4 r4 = PMT[3];
+    
+    float4 r1D = r1 * D;
+    float4 r2D = r2 * D;
+    float4 r3D = r3 * D;
+    float4 r4D = r4 * D;
+    
+    pout = float4( dot(r1D,r4), dot(r2D,r4), 0, 1 );
+    
+    float a = dot( r4D, r4 );
+    float b = 2 * dot( r1D, r4 );
+    float c = dot( r1D, r1 );
+    
+    float radius = (-b + sqrt( b*b - 4*a*c )) / (2*a);
+
+    cout = color;
+	
+/*	float4 peye = mul( ModelView, pvec );
+	float3 ueye = mul( ModelViewIT, float4(uvec,0) ).xyz;
+	float3 veye = mul( ModelViewIT, float4(vvec,0) ).xyz;
+
+    float radius = sqrt(max(dot(uvec, uvec), dot(vvec, vvec)));
+   
+    psize = 2.0 * radius * (-near / peye.z) * (wsize.y / (top - bottom));
+   
+    cout = color;
+    
+    v1 = cross( peye, -veye );
+    v2 = cross( -ueye, peye );
+    v3 = cross( ueye, veye );
+    
+    depth = dot(v3,peye);*/
+}
+

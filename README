@@ -1,0 +1,12 @@
+--------
+Controls
+--------
+
+Arrow keys up/down - Move camera
+Space - Pause rotation
+
+D - Toggle deferred shading
+O - Toggle silhouette outlines (deferred shading only)
+C - Toggle rendering of cylinders
+S - Toggle rendering of spheres
+B - Switch background color

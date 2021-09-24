@@ -1,0 +1,143 @@
+const float4 diag = { 1, 1, 0, -1 };
+
+struct Input
+{
+    float3 center   : POSITION;
+    float3 color    : COLOR;    
+    float radius    : TEXCOORD0;
+    float3 dir		: TEXCOORD1;
+};
+
+struct Output
+{
+    float4 position : POSITION;
+    float3 color    : COLOR;
+    float psize     : PSIZE;
+    float4x4 MT_IT  : TEXCOORD0;
+};
+
+float4 capBBox( float4x4 PMT, float z )
+{
+    float4 p = mul( PMT, float4(0,0,z,1) );
+    float4 u = mul( PMT, float4(1,0,z,1) );
+    float4 v = mul( PMT, float4(0,1,z,1) );
+
+    p /= p.w;
+    u /= u.w;
+    v /= v.w;
+
+    float2 dists;
+	dists.x = distance( p.xy, u.xy );
+	dists.y = distance( p.xy, v.xy );	
+	dists /= (2 * p.z);
+	
+	float4 result;
+	result.xy = p.xy - dists;
+	result.zw = p.xy + dists;
+	return result;
+}
+
+void main(  Input input,
+            uniform float4x4 ModelViewIT,
+            uniform float4x4 ModelViewProj,
+            uniform float4 wsize,
+            out Output output )
+{
+    output.color = input.color;
+    
+    // Compose the variance matrix
+    float zScale = length( input.dir );
+    input.dir /= zScale;
+    
+    // Scaling part (transposed)
+    float4x4 Ts_T;
+    Ts_T[0] = float4( input.radius, 0, 0, 0 );
+    Ts_T[1] = float4( 0, input.radius, 0, 0 );
+    Ts_T[2] = float4( 0, 0, zScale, 0 );
+    Ts_T[3] = float4( 0, 0, 0, 1 );
+    
+    // Rotation part (transposed) - this generates an orthogonal basis from the given z-direction
+    float4x4 Tr_T;
+    Tr_T[2] = float4( input.dir, 0 );
+    float3 helper = (abs(input.dir[1]) > 0.9) ? float3( 1, 0, 0 ) : float3( 0, 1, 0 );
+    Tr_T[0] = float4( normalize( cross( helper, Tr_T[2].xyz ) ), 0 );
+    Tr_T[1] = float4( cross( Tr_T[2].xyz, Tr_T[0].xyz ), 0 );
+    Tr_T[3] = float4( 0, 0, 0, 1 );
+    
+    // Translation part (transposed)
+    float4x4 Tt_T;
+    Tt_T[0] = float4( 1, 0, 0, 0 );
+    Tt_T[1] = float4( 0, 1, 0, 0 );
+    Tt_T[2] = float4( 0, 0, 1, 0 );
+    Tt_T[3] = float4( input.center, 1 );
+    
+    // Final variance matrix is composed from the above parts
+    float4x4 T_T = mul( Ts_T, mul( Tr_T, Tt_T ) );
+    
+    // Combine modelview-projection and variance matrices
+    float4x4 PMT = mul( ModelViewProj, transpose( T_T ) );
+    
+    // The 'elegant' way to compute the cylinder center, but this is overruled 
+    // for now by a somewhat rougher method; see below.
+/*
+    // Solve the quadratic equation
+    float4 r1D = PMT[0] * diag;
+    float4 r2D = PMT[1] * diag;
+    float4 r4D = PMT[3] * diag;
+
+    float a = dot(r4D, PMT[3]);
+
+    float2 b, c;
+    b.x = dot(r1D, PMT[3]);     // -b_x / 2    
+    b.y = dot(r2D, PMT[3]);     // -b_y / 2
+    c.x = dot(r1D, PMT[0]);
+    c.y = dot(r2D, PMT[1]);
+
+    float4 eqn = float4( b, c ) / a;    // (-b / 2a), (c / a)
+
+	// Compute bounding box center
+	output.position = float4( eqn.x, eqn.y, 0, 1 );    // bbox center = -b / 2a
+*/
+
+    // Compute the cylinder bounding box (used for both vertex position and point size)
+    float4 bbox1 = capBBox( PMT, 1 );
+    float4 bbox2 = capBBox( PMT, -1 );
+    
+    // Union of the two cylinder cap bounding boxes
+    float4 bbox;
+    bbox.xy = min( bbox1.xy, bbox2.xy );
+    bbox.zw = max( bbox1.zw, bbox2.zw );
+
+	// Vertex position is the center of the bounding box
+    output.position = float4( (bbox.xy + bbox.zw) * 0.5, 0, 1 );
+    
+    // Convert bbox width and height to pixel sizes
+    bbox.zw -= bbox.xy;
+    bbox.zw *= wsize.xy;
+    output.psize = max( bbox.z, bbox.w );
+    
+    // Compose the inverse variance matrix    
+    // Inverse scaling part (transposed)
+    float4x4 Ts_IT;
+    Ts_IT[0] = float4( 1.0/input.radius, 0, 0, 0 );
+    Ts_IT[1] = float4( 0, 1.0/input.radius, 0, 0 );
+    Ts_IT[2] = float4( 0, 0, 1.0/zScale, 0 );
+    Ts_IT[3] = float4( 0, 0, 0, 1 );
+    
+    // Inverse rotation part (transposed)
+    float4x4 Tr_IT = transpose( Tr_T );
+    
+    // Inverse translation part (transposed)
+    float4x4 Tt_IT;
+    Tt_IT[0] = float4( 1, 0, 0, 0 );
+    Tt_IT[1] = float4( 0, 1, 0, 0 );
+    Tt_IT[2] = float4( 0, 0, 1, 0 );
+    Tt_IT[3] = float4( -input.center, 1 );
+    
+    // Inverse transpose variance matrix
+    float4x4 T_IT = mul( Tt_IT, mul( Tr_IT, Ts_IT ) );    
+    
+    // Calculate inverse transpose of ModelView * Variance for the fragment shader
+    output.MT_IT = mul( ModelViewIT, T_IT );    
+}
+

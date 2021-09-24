@@ -1,0 +1,44 @@
+const float shininess = 25;
+const float3 lightCoef = { 0.25, 0.5, 1 };
+
+struct Input
+{
+    float2 texcoord : TEXCOORD0;
+};
+
+struct Output
+{
+    float3 color    : COLOR;
+};
+
+void main(  Input input,
+            uniform sampler2D surface,
+            uniform sampler2D color,
+            uniform float2 unproj_scale,
+            uniform float2 unproj_offset,
+            uniform float near,
+            uniform float2 tex_res,
+            uniform float3 lightpos,
+            out Output output )
+{
+//    output.color = tex2D( color, input.texcoord ).rgb;
+//    return;
+
+    float3 frg_e = float3( input.texcoord * unproj_scale - unproj_offset, -near );
+
+    float4 surfaceTexel = tex2D( surface, input.texcoord );
+    float3 nrm_e = surfaceTexel.xyz;
+    float mu = surfaceTexel.w;    
+    float3 pos_e = mu * frg_e;
+
+	// Evaluate the lighting model
+	float3 lighting;
+	float3 lightdir = normalize( lightpos - pos_e );
+		
+	// Pure Phong shading
+	lighting.x = 1;
+	lighting.y = saturate( dot( nrm_e, lightdir ) );
+	lighting.z = pow( saturate( dot( normalize( -pos_e ), reflect( -lightdir, nrm_e ) ) ), shininess );
+	    
+	output.color = tex2D( color, input.texcoord ).rgb * dot( lightCoef, lighting );
+}
