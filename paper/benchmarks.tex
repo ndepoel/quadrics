@@ -1,0 +1,472 @@
+\section{Dataset labels}
+\label{app:labels}
+\begin{tabular}{|l|l|r|}
+\hline
+Label  & Filename & \# Spheres \\
+\hline
+\hline
+A &	handle.sql & 2 \\
+\hline
+C &	1crn\_vdw.sql & 327 \\
+\hline
+B &	1crn\_cpk.sql & 327 \\
+\hline
+D &	1ben\_vdw.sql & 1713 \\
+\hline
+E &	1ben\_vdw\_white.sql & 1713 \\
+\hline
+F &	2bg9\_cpk.sql & 14924 \\
+\hline
+G &	2bg9\_vdw.sql & 14924 \\
+\hline
+H & 2bg9\_vdw\_index.sql & 14924 \\
+\hline
+I &	1xi5\_vwd.sql & 15696 \\
+\hline
+J & 1j5e\_cpk.sql & 51933 \\
+\hline
+K &	1j5e\_vdw.sql & 51933 \\
+\hline
+L &	1kqs\_cpk.sql & 98688 \\
+\hline
+N & 1vqm\_vdw.sql & 99045 \\
+\hline
+M & 1vqm\_lic.sql & 99045 \\
+\hline
+\end{tabular}
+
+\newpage
+\section{Benchmark results}
+
+\subsubsection*{Nvidia GeForce 6600 GT with camera distance 1}
+\begin{tabular}{|l|r|r|r|r|}
+\hline
+Filename & \# Spheres & Direct shading & \multicolumn{2}{|c|}{Deferred shading} \\
+         &            & Phong (fps)    & \multicolumn{1}{|c}{Phong (fps)} & Phong + SL (fps) \\  
+\hline
+\hline
+handle.sql & 2 & 118.78 & 70.23 & 48.48 \\
+\hline
+1crn\_cpk.sql & 327 & 124.75 & 79.95 & 54.04 \\
+\hline
+1crn\_vdw.sql & 327 & 17.17 & 18.60 & 16.95 \\
+\hline
+1ben\_vdw.sql & 1713 & 7.13 & 8.65 & 8.15 \\
+\hline
+1ben\_vdw\_white.sql & 1713 & 7.34 & 8.62 & 8.17 \\
+\hline
+2bg9\_cpk.sql & 14924 & 36.87 & 35.72 & 29.57 \\
+\hline
+2bg9\_vdw.sql & 14924 & 3.79 & 4.28 & 4.25 \\
+\hline
+2bg9\_vdw\_index.sql & 14924 & 6.95 & 8.25 & 7.83 \\
+\hline
+1xi5\_vwd.sql & 15696 & 50.24 & 45.20 & 36.25 \\
+\hline
+1j5e\_cpk.sql & 51933 & 40.14 & 38.62 & 31.77 \\
+\hline
+1j5e\_vdw.sql & 51933 & 3.29 & 3.95 & 3.92 \\
+\hline
+1kqs\_cpk.sql & 98688 & 10.27 & 12.04 & 11.35 \\
+\hline
+1vqm\_lic.sql & 99045 & 41.85 & 38.14 & 32.55 \\
+\hline
+1vqm\_vdw.sql & 99045 & 2.04 & 2.46 & 2.44 \\
+\hline
+\end{tabular}
+\subsubsection*{Nvidia GeForce 6600 GT with camera distance 3}
+\begin{tabular}{|l|r|r|r|r|}
+\hline
+Filename & \# Spheres & Direct shading & \multicolumn{2}{|c|}{Deferred shading} \\
+         &            & Phong (fps)    & \multicolumn{1}{|c}{Phong (fps)} & Phong + SL (fps) \\  
+\hline
+\hline
+handle.sql & 2 & 114.25 & 77.17 & 52.66 \\
+\hline
+1crn\_cpk.sql & 327 & 294.27 & 114.33 & 67.42 \\
+\hline
+1crn\_vdw.sql & 327 & 47.42 & 43.87 & 35.58 \\
+\hline
+1ben\_vdw.sql & 1713 & 29.90 & 30.64 & 26.38 \\
+\hline
+1ben\_vdw\_white.sql & 1713 & 29.93 & 30.71 & 26.24 \\
+\hline
+2bg9\_cpk.sql & 14924 & 84.05 & 63.70 & 45.88 \\
+\hline
+2bg9\_vdw.sql & 14924 & 10.25 & 11.78 & 11.14 \\
+\hline
+2bg9\_vdw\_index.sql & 14924 & 28.65 & 29.66 & 25.46 \\
+\hline
+1xi5\_vwd.sql & 15696 & 122.08 & 79.56 & 53.49 \\
+\hline
+1j5e\_cpk.sql & 51933 & 118.75 & 80.40 & 54.23 \\
+\hline
+1j5e\_vdw.sql & 51933 & 14.83 & 16.67 & 15.28 \\
+\hline
+1kqs\_cpk.sql & 98688 & 23.20 & 24.53 & 21.53 \\
+\hline
+1vqm\_lic.sql & 99045 & 69.92 & 58.77 & 43.32 \\
+\hline
+1vqm\_vdw.sql & 99045 & 4.98 & 5.99 & 5.79 \\
+\hline
+\end{tabular}
+\subsubsection*{Nvidia GeForce 6600 GT with camera distance 5}
+\begin{tabular}{|l|r|r|r|r|}
+\hline
+Filename & \# Spheres & Direct shading & \multicolumn{2}{|c|}{Deferred shading} \\
+         &            & Phong (fps)    & \multicolumn{1}{|c}{Phong (fps)} & Phong + SL (fps) \\  
+\hline
+\hline
+handle.sql & 2 & 187.62 & 97.88 & 62.49 \\
+\hline
+1crn\_cpk.sql & 327 & 460.40 & 128.25 & 72.26 \\
+\hline
+1crn\_vdw.sql & 327 & 118.83 & 78.39 & 53.26 \\
+\hline
+1ben\_vdw.sql & 1713 & 74.48 & 59.69 & 44.11 \\
+\hline
+1ben\_vdw\_white.sql & 1713 & 74.72 & 60.04 & 43.96 \\
+\hline
+2bg9\_cpk.sql & 14924 & 177.71 & 93.20 & 60.25 \\
+\hline
+2bg9\_vdw.sql & 14924 & 26.55 & 27.63 & 24.15 \\
+\hline
+2bg9\_vdw\_index.sql & 14924 & 67.55 & 55.52 & 41.87 \\
+\hline
+1xi5\_vwd.sql & 15696 & 237.03 & 106.27 & 64.77 \\
+\hline
+1j5e\_cpk.sql & 51933 & 143.67 & 89.73 & 58.39 \\
+\hline
+1j5e\_vdw.sql & 51933 & 35.86 & 34.76 & 29.26 \\
+\hline
+1kqs\_cpk.sql & 98688 & 47.09 & 43.56 & 34.99 \\
+\hline
+1vqm\_lic.sql & 99045 & 84.51 & 67.47 & 48.14 \\
+\hline
+1vqm\_vdw.sql & 99045 & 12.52 & 14.18 & 13.14 \\
+\hline
+\end{tabular}
+\subsubsection*{Nvidia GeForce 8400 GS with camera distance 1}
+\begin{tabular}{|l|r|r|r|r|}
+\hline
+Filename & \# Spheres & Direct shading & \multicolumn{2}{|c|}{Deferred shading} \\
+         &            & Phong (fps)    & \multicolumn{1}{|c}{Phong (fps)} & Phong + SL (fps) \\  
+\hline
+\hline
+handle.sql & 2 & 173.55 & 54.24 & 51.09 \\
+\hline
+1crn\_cpk.sql & 327 & 114.85 & 46.97 & 44.84 \\
+\hline
+1crn\_vdw.sql & 327 & 21.03 & 20.07 & 19.73 \\
+\hline
+1ben\_vdw.sql & 1713 & 8.58 & 10.00 & 9.92 \\
+\hline
+1ben\_vdw\_white.sql & 1713 & 8.57 & 10.00 & 9.92 \\
+\hline
+2bg9\_cpk.sql & 14924 & 41.62 & 29.93 & 29.14 \\
+\hline
+2bg9\_vdw.sql & 14924 & 5.10 & 6.36 & 6.30 \\
+\hline
+2bg9\_vdw\_index.sql & 14924 & 7.70 & 8.92 & 8.84 \\
+\hline
+1xi5\_vwd.sql & 15696 & 49.78 & 32.62 & 31.51 \\
+\hline
+1j5e\_cpk.sql & 51933 & 38.28 & 27.36 & 26.67 \\
+\hline
+1j5e\_vdw.sql & 51933 & 3.72 & 4.55 & 4.52 \\
+\hline
+1kqs\_cpk.sql & 98688 & 13.62 & 13.75 & 13.60 \\
+\hline
+1vqm\_lic.sql & 99045 & 40.00 & 27.83 & 27.01 \\
+\hline
+1vqm\_vdw.sql & 99045 & 2.48 & 3.14 & 3.13 \\
+\hline
+\end{tabular}
+\subsubsection*{Nvidia GeForce 8400 GS with camera distance 3}
+\begin{tabular}{|l|r|r|r|r|}
+\hline
+Filename & \# Spheres & Direct shading & \multicolumn{2}{|c|}{Deferred shading} \\
+         &            & Phong (fps)    & \multicolumn{1}{|c}{Phong (fps)} & Phong + SL (fps) \\  
+\hline
+\hline
+handle.sql & 2 & 109.45 & 48.16 & 46.63 \\
+\hline
+1crn\_cpk.sql & 327 & 199.28 & 54.06 & 51.17 \\
+\hline
+1crn\_vdw.sql & 327 & 52.15 & 34.92 & 33.65 \\
+\hline
+1ben\_vdw.sql & 1713 & 32.00 & 26.28 & 25.61 \\
+\hline
+1ben\_vdw\_white.sql & 1713 & 32.02 & 26.28 & 25.61 \\
+\hline
+2bg9\_cpk.sql & 14924 & 72.89 & 38.35 & 36.87 \\
+\hline
+2bg9\_vdw.sql & 14924 & 10.80 & 11.52 & 11.37 \\
+\hline
+2bg9\_vdw\_index.sql & 14924 & 28.43 & 23.21 & 22.65 \\
+\hline
+1xi5\_vwd.sql & 15696 & 98.73 & 43.24 & 41.32 \\
+\hline
+1j5e\_cpk.sql & 51933 & 96.11 & 43.33 & 41.45 \\
+\hline
+1j5e\_vdw.sql & 51933 & 14.56 & 13.88 & 13.66 \\
+\hline
+1kqs\_cpk.sql & 98688 & 20.85 & 17.82 & 17.54 \\
+\hline
+1vqm\_lic.sql & 99045 & 61.80 & 35.67 & 34.39 \\
+\hline
+1vqm\_vdw.sql & 99045 & 5.28 & 5.87 & 5.83 \\
+\hline
+\end{tabular}
+\subsubsection*{Nvidia GeForce 8400 GS with camera distance 5}
+\begin{tabular}{|l|r|r|r|r|}
+\hline
+Filename & \# Spheres & Direct shading & \multicolumn{2}{|c|}{Deferred shading} \\
+         &            & Phong (fps)    & \multicolumn{1}{|c}{Phong (fps)} & Phong + SL (fps) \\  
+\hline
+\hline
+handle.sql & 2 & 155.52 & 56.68 & 53.57 \\
+\hline
+1crn\_cpk.sql & 327 & 246.85 & 58.01 & 54.56 \\
+\hline
+1crn\_vdw.sql & 327 & 106.69 & 46.14 & 44.29 \\
+\hline
+1ben\_vdw.sql & 1713 & 72.16 & 39.89 & 38.31 \\
+\hline
+1ben\_vdw\_white.sql & 1713 & 72.11 & 39.90 & 38.35 \\
+\hline
+2bg9\_cpk.sql & 14924 & 124.28 & 46.51 & 44.41 \\
+\hline
+2bg9\_vdw.sql & 14924 & 26.35 & 22.02 & 21.62 \\
+\hline
+2bg9\_vdw\_index.sql & 14924 & 60.87 & 35.18 & 33.89 \\
+\hline
+1xi5\_vwd.sql & 15696 & 152.05 & 50.00 & 47.68 \\
+\hline
+1j5e\_cpk.sql & 51933 & 117.23 & 47.05 & 44.84 \\
+\hline
+1j5e\_vdw.sql & 51933 & 33.33 & 25.15 & 24.48 \\
+\hline
+1kqs\_cpk.sql & 98688 & 40.24 & 27.56 & 26.77 \\
+\hline
+1vqm\_lic.sql & 99045 & 74.45 & 40.55 & 39.01 \\
+\hline
+1vqm\_vdw.sql & 99045 & 12.10 & 11.73 & 11.58 \\
+\hline
+\end{tabular}
+\subsubsection*{Nvidia GeForce 8600 GT with camera distance 1}
+\begin{tabular}{|l|r|r|r|r|}
+\hline
+Filename & \# Spheres & Direct shading & \multicolumn{2}{|c|}{Deferred shading} \\
+         &            & Phong (fps)    & \multicolumn{1}{|c}{Phong (fps)} & Phong + SL (fps) \\  
+\hline
+\hline
+handle.sql & 2 & 636.40 & 201.64 & 179.60 \\
+\hline
+1crn\_cpk.sql & 327 & 349.70 & 166.42 & 152.07 \\
+\hline
+1crn\_vdw.sql & 327 & 55.96 & 60.20 & 58.22 \\
+\hline
+1ben\_vdw.sql & 1713 & 22.62 & 28.17 & 27.72 \\
+\hline
+1ben\_vdw\_white.sql & 1713 & 22.62 & 28.18 & 27.74 \\
+\hline
+2bg9\_cpk.sql & 14924 & 121.20 & 97.22 & 92.15 \\
+\hline
+2bg9\_vdw.sql & 14924 & 13.53 & 17.45 & 17.24 \\
+\hline
+2bg9\_vdw\_index.sql & 14924 & 20.58 & 24.97 & 24.63 \\
+\hline
+1xi5\_vwd.sql & 15696 & 145.81 & 107.30 & 101.33 \\
+\hline
+1j5e\_cpk.sql & 51933 & 109.80 & 86.46 & 82.84 \\
+\hline
+1j5e\_vdw.sql & 51933 & 9.64 & 12.09 & 12.01 \\
+\hline
+1kqs\_cpk.sql & 98688 & 37.58 & 40.42 & 39.60 \\
+\hline
+1vqm\_lic.sql & 99045 & 114.99 & 88.45 & 84.37 \\
+\hline
+1vqm\_vdw.sql & 99045 & 6.36 & 8.25 & 8.19 \\
+\hline
+\end{tabular}
+\subsubsection*{Nvidia GeForce 8600 GT with camera distance 3}
+\begin{tabular}{|l|r|r|r|r|}
+\hline
+Filename & \# Spheres & Direct shading & \multicolumn{2}{|c|}{Deferred shading} \\
+         &            & Phong (fps)    & \multicolumn{1}{|c}{Phong (fps)} & Phong + SL (fps) \\  
+\hline
+\hline
+handle.sql & 2 & 333.90 & 180.88 & 164.30 \\
+\hline
+1crn\_cpk.sql & 327 & 651.00 & 198.00 & 178.28 \\
+\hline
+1crn\_vdw.sql & 327 & 146.17 & 112.03 & 106.12 \\
+\hline
+1ben\_vdw.sql & 1713 & 89.51 & 81.81 & 78.48 \\
+\hline
+1ben\_vdw\_white.sql & 1713 & 89.66 & 81.98 & 78.51 \\
+\hline
+2bg9\_cpk.sql & 14924 & 216.01 & 129.40 & 120.88 \\
+\hline
+2bg9\_vdw.sql & 14924 & 29.54 & 33.11 & 32.52 \\
+\hline
+2bg9\_vdw\_index.sql & 14924 & 80.27 & 71.64 & 68.92 \\
+\hline
+1xi5\_vwd.sql & 15696 & 290.00 & 148.17 & 137.13 \\
+\hline
+1j5e\_cpk.sql & 51933 & 278.62 & 147.04 & 135.62 \\
+\hline
+1j5e\_vdw.sql & 51933 & 39.32 & 39.85 & 39.00 \\
+\hline
+1kqs\_cpk.sql & 98688 & 58.39 & 53.96 & 52.38 \\
+\hline
+1vqm\_lic.sql & 99045 & 175.85 & 117.00 & 109.78 \\
+\hline
+1vqm\_vdw.sql & 99045 & 13.60 & 15.67 & 15.53 \\
+\hline
+\end{tabular}
+\subsubsection*{Nvidia GeForce 8600 GT with camera distance 5}
+\begin{tabular}{|l|r|r|r|r|}
+\hline
+Filename & \# Spheres & Direct shading & \multicolumn{2}{|c|}{Deferred shading} \\
+         &            & Phong (fps)    & \multicolumn{1}{|c}{Phong (fps)} & Phong + SL (fps) \\  
+\hline
+\hline
+handle.sql & 2 & 506.55 & 211.28 & 190.28 \\
+\hline
+1crn\_cpk.sql & 327 & 850.20 & 210.58 & 188.68 \\
+\hline
+1crn\_vdw.sql & 327 & 322.94 & 162.45 & 149.36 \\
+\hline
+1ben\_vdw.sql & 1713 & 212.91 & 133.37 & 124.65 \\
+\hline
+1ben\_vdw\_white.sql & 1713 & 212.56 & 133.59 & 124.35 \\
+\hline
+2bg9\_cpk.sql & 14924 & 385.60 & 165.50 & 152.05 \\
+\hline
+2bg9\_vdw.sql & 14924 & 74.35 & 67.87 & 65.43 \\
+\hline
+2bg9\_vdw\_index.sql & 14924 & 175.68 & 115.24 & 108.62 \\
+\hline
+1xi5\_vwd.sql & 15696 & 474.61 & 179.38 & 162.92 \\
+\hline
+1j5e\_cpk.sql & 51933 & 333.93 & 161.54 & 149.13 \\
+\hline
+1j5e\_vdw.sql & 51933 & 88.16 & 73.75 & 71.04 \\
+\hline
+1kqs\_cpk.sql & 98688 & 112.78 & 87.11 & 83.13 \\
+\hline
+1vqm\_lic.sql & 99045 & 207.52 & 131.89 & 123.25 \\
+\hline
+1vqm\_vdw.sql & 99045 & 31.53 & 32.29 & 31.72 \\
+\hline
+\end{tabular}
+\subsubsection*{Nvidia GeForce 9800 GTX+ with camera distance 1}
+\begin{tabular}{|l|r|r|r|r|}
+\hline
+Filename & \# Spheres & Direct shading & \multicolumn{2}{|c|}{Deferred shading} \\
+         &            & Phong (fps)    & \multicolumn{1}{|c}{Phong (fps)} & Phong + SL (fps) \\  
+\hline
+\hline
+handle.sql & 2 & 3293.40 & 1235.70 & 1142.30 \\
+\hline
+1crn\_cpk.sql & 327 & 1790.70 & 1031.40 & 954.40 \\
+\hline
+1crn\_vdw.sql & 327 & 340.07 & 372.40 & 362.33 \\
+\hline
+1ben\_vdw.sql & 1713 & 138.63 & 172.93 & 169.80 \\
+\hline
+1ben\_vdw\_white.sql & 1713 & 138.20 & 171.98 & 170.41 \\
+\hline
+2bg9\_cpk.sql & 14924 & 648.14 & 572.30 & 546.20 \\
+\hline
+2bg9\_vdw.sql & 14924 & 82.49 & 105.12 & 104.81 \\
+\hline
+2bg9\_vdw\_index.sql & 14924 & 118.69 & 145.24 & 143.39 \\
+\hline
+1xi5\_vwd.sql & 15696 & 749.40 & 622.84 & 591.74 \\
+\hline
+1j5e\_cpk.sql & 51933 & 561.80 & 493.65 & 474.25 \\
+\hline
+1j5e\_vdw.sql & 51933 & 53.00 & 65.18 & 64.89 \\
+\hline
+1kqs\_cpk.sql & 98688 & 204.80 & 220.73 & 217.36 \\
+\hline
+1vqm\_lic.sql & 99045 & 551.94 & 479.40 & 460.05 \\
+\hline
+1vqm\_vdw.sql & 99045 & 36.49 & 46.44 & 46.27 \\
+\hline
+\end{tabular}
+\subsubsection*{Nvidia GeForce 9800 GTX+ with camera distance 3}
+\begin{tabular}{|l|r|r|r|r|}
+\hline
+Filename & \# Spheres & Direct shading & \multicolumn{2}{|c|}{Deferred shading} \\
+         &            & Phong (fps)    & \multicolumn{1}{|c}{Phong (fps)} & Phong + SL (fps) \\  
+\hline
+\hline
+handle.sql & 2 & 1786.50 & 1026.60 & 943.20 \\
+\hline
+1crn\_cpk.sql & 327 & 2814.20 & 1217.80 & 1108.30 \\
+\hline
+1crn\_vdw.sql & 327 & 816.84 & 692.40 & 655.83 \\
+\hline
+1ben\_vdw.sql & 1713 & 484.90 & 476.20 & 460.75 \\
+\hline
+1ben\_vdw\_white.sql & 1713 & 490.65 & 482.55 & 463.85 \\
+\hline
+2bg9\_cpk.sql & 14924 & 1071.30 & 755.20 & 711.83 \\
+\hline
+2bg9\_vdw.sql & 14924 & 149.57 & 166.58 & 164.48 \\
+\hline
+2bg9\_vdw\_index.sql & 14924 & 352.36 & 309.74 & 301.04 \\
+\hline
+1xi5\_vwd.sql & 15696 & 1399.10 & 869.30 & 812.80 \\
+\hline
+1j5e\_cpk.sql & 51933 & 1134.40 & 847.90 & 790.12 \\
+\hline
+1j5e\_vdw.sql & 51933 & 147.99 & 132.92 & 131.73 \\
+\hline
+1kqs\_cpk.sql & 98688 & 298.74 & 289.81 & 283.20 \\
+\hline
+1vqm\_lic.sql & 99045 & 717.73 & 626.04 & 598.14 \\
+\hline
+1vqm\_vdw.sql & 99045 & 58.75 & 59.26 & 58.77 \\
+\hline
+\end{tabular}
+\subsubsection*{Nvidia GeForce 9800 GTX+ with camera distance 5}
+\begin{tabular}{|l|r|r|r|r|}
+\hline
+Filename & \# Spheres & Direct shading & \multicolumn{2}{|c|}{Deferred shading} \\
+         &            & Phong (fps)    & \multicolumn{1}{|c}{Phong (fps)} & Phong + SL (fps) \\  
+\hline
+\hline
+handle.sql & 2 & 2535.30 & 1184.30 & 1073.10 \\
+\hline
+1crn\_cpk.sql & 327 & 3432.50 & 1302.60 & 1184.50 \\
+\hline
+1crn\_vdw.sql & 327 & 1642.40 & 996.30 & 919.40 \\
+\hline
+1ben\_vdw.sql & 1713 & 992.40 & 742.90 & 702.33 \\
+\hline
+1ben\_vdw\_white.sql & 1713 & 990.00 & 743.30 & 702.20 \\
+\hline
+2bg9\_cpk.sql & 14924 & 1801.30 & 1022.90 & 947.60 \\
+\hline
+2bg9\_vdw.sql & 14924 & 318.94 & 287.34 & 280.87 \\
+\hline
+2bg9\_vdw\_index.sql & 14924 & 639.14 & 453.55 & 436.76 \\
+\hline
+1xi5\_vwd.sql & 15696 & 1799.30 & 1002.00 & 929.60 \\
+\hline
+1j5e\_cpk.sql & 51933 & 1212.20 & 859.40 & 801.50 \\
+\hline
+1j5e\_vdw.sql & 51933 & 261.80 & 210.66 & 207.12 \\
+\hline
+1kqs\_cpk.sql & 98688 & 483.55 & 448.46 & 431.60 \\
+\hline
+1vqm\_lic.sql & 99045 & 835.90 & 659.30 & 636.87 \\
+\hline
+1vqm\_vdw.sql & 99045 & 108.38 & 94.61 & 93.78 \\
+\hline
+\end{tabular}

@@ -1,0 +1,110 @@
+\section{Solution method}
+In order to accurately render a quadratic surface, a more mathematical approach is required.
+In general, quadratic surfaces can be represented by the following polynomial equation:
+\begin{eqnarray}
+\label{eqn:quadric} f(x,y,z) & = & Ax^2 + 2Bxy + 2Cxz + 2Dx + Ey^2\\
+\nonumber & & + 2Fyz + 2Gy + Hz^2 + 2Iz + J\\
+\nonumber & = & 0
+\end{eqnarray}
+The coefficients A through J determine the shape, size and orientation of a quadric.
+
+It is possible to define a ray which travels from the viewer's eye through a pixel on the image plane into the 3D scene.
+By calculating at which point this ray satisfies Equation \ref{eqn:quadric} (i.e. where the ray intersects the quadric), we can
+determine the point on the surface that corresponds to the pixel on the screen. 
+This ray-casting approach results in a per-pixel accurate representation of the quadratic surface (Fig. \ref{f:rayspheres}).
+
+The challenges in implemented such a method on the GPU are calculating an accurate screen-space bounding box of the quadric,
+and efficiently computing the ray-quadric intersection for each fragment. 
+Sigg et al. have come up with solutions for these challenges, which they have described in their paper.
+
+Sigg approaches the problem by first representing Equation \ref{eqn:quadric} in a matrix form, which can be separated into a normalized diagonal matrix
+and a so-called {\em variance matrix}.
+The normalized diagonal matrix (${\bf D}$) represents the quadratic surface in its most basic form, without any scaling, rotation or translation.
+The coordinate system where the quadric has this normalized form is dubbed {\em parameter space}.
+With this matrix ${\bf D}$, the quadratic surface can be defined as the set of points $\vec{x}$ that satisfy the following equation:
+\begin{eqnarray}
+\label{eqn:diag} \vec{x}^T {\bf D} \vec{x} & = & 0
+\end{eqnarray}
+The variance matrix (${\bf T}$) defines the transformation of the quadric from parameter space to its specialized form in object space.
+This essentially expands the rendering pipeline with an additional transformation, preceding the object transformations.
+
+The advantage of this method is that coordinates from any coordinate space can be transformed into parameter space, where computations
+with the quadratic surface can be done using the simpler normalized diagonal form. 
+For computation of a sphere's bounding box, advantage is taken of the fact that a point on the surface of a normalized sphere equals
+the normal of the surface at that point.
+Concerning the ray-quadric intersection, once the ray has been transformed into parameter space, a simple quadratic equation can be constructed
+that, when solved, yields the intersection point.
+
+For our own implementation, we had to slightly alter Sigg's method.
+
+\subsection*{Ray-quadric intersection}
+Sigg defines the ray-quadric intersection point as a window-space vector $\vec{x_w} = ( x_w, y_w, z_w, 1 )$, where $x_w$ and $y_w$ are the known 
+fragment window coordinates, and $z_w$ is the unknown depth value that we need to solve for.
+By transforming this window-space vector to parameter space, a quadratic equation can be derived with $z_w$ as the unknown variable.
+Once $z_w$ has been determined, its value can be further used to determine the position and normal of the intersection point.
+
+In practice however, implementing Sigg's method turned out to be problematic and more importantly, difficult to reason about.
+Sigg's paper leaves some crucial details unspoken and from his implementation we concluded that some very unintuitive
+steps had to be taken to find a correct solution.
+
+To counter this problem, we employed an alternative, more intuitive way to represent the viewing ray and derived a quadratic solution from this,
+similar to Sigg's method. This made it easier to implement the ray casting and to properly compute all the desired result values. The only downside
+to our method is that it allows less precomputation to be done in the vertex shader than Sigg's method, so it might be slightly less efficient.
+
+Instead of defining a viewing ray as Sigg does, we define the ray as linear interpolation from the eye through the image plane:
+\begin{eqnarray*}
+\vec{p} & = & (1 - \mu)\vec{e} + \mu \vec{f}\\
+	& = & \vec{e} + \mu(\vec{f}-\vec{e})
+\end{eqnarray*}
+Where $\vec{e}$ is the position of the viewer's eye, $\vec{f}$ is the position of the fragment on the image plane, 
+and $\vec{p}$ is the intersection point of the ray with the quadratic surface. 
+$\mu$ in an interpolation factor that dictates how far along the viewing ray the intersection point lies. It is this value that we will want to find.
+
+We can simplify this equation by introducing a ray vector $\vec{r} = \vec{f} - \vec{e}$, which is the direction from the eye to the fragment:
+\begin{eqnarray}
+\label{eqn:ray}\vec{p} & = & \vec{e} + \mu{\vec{r}}
+\end{eqnarray}
+Note that this equation holds in all the different vector spaces, and that the value of $\mu$ has the same meaning in every vector space. 
+
+The position of the fragment in eye-space ($\vec{f_e}$) can be determined by performing an inverse projection on the fragment's windows coordinates.
+Its corresponding z-coordinate is the known distance from the image plane to the camera center.
+The eye position in eye-space ($\vec{e_e}$) is constant and known; $\vec{e_e} = (0,0,0)^T$ by definition. 
+This makes the ray equation even simpler in eye-space:
+\begin{eqnarray}
+\nonumber \vec{p_e} & = & \vec{e_e} + \mu(\vec{f_e} - \vec{e_e})\\
+\label{eqn:ray_eye} & = & \mu \vec{f_e}
+\end{eqnarray}
+
+Both the eye position and the fragment position can be transformed to parameter-space by multiplying them with the inverse variance-modelview 
+transformation matrix $({\bf M \cdot T})^{-1}$. 
+From these positions $\vec{e_p}$ and $\vec{f_p}$ a parameter-space ray $\vec{r_p}$ can be composed, which conforms to equation \ref{eqn:ray}.
+
+We also know that the intersection point in parameter-space $(\vec{p_p})$ lies on the quadratic surface, and thus has to satisfy the following equation
+(according to Equation \ref{eqn:diag}):
+\[
+\vec{p_p}^T {\bf D} \vec{p_p} = 0
+\]
+Substituting $p_p$ with its ray equivalent from Equation \ref{eqn:ray}, we get:
+\begin{eqnarray*}
+0 & = & (\vec{e_p} + \mu \vec{r_p})^T \; {\bf D} \; (\vec{e_p} + \mu \vec{r_p})\\
+ & = & (\vec{r_p}^T {\bf D} \vec{r_p}) \mu^2 + 2 (\vec{e_p}^T {\bf D} \vec{r_p}) \mu + (\vec{e_p}^T {\bf D} \vec{e_p})
+\end{eqnarray*}
+This is a straightforward quadratic equation with $\mu$ as the only unknown variable. It can be solved easily with the standard quadratic formula.
+
+As with any quadratic equation, there can 0, 1 or 2 solutions for $\mu$. 
+In case of zero solutions, the ray does not hit the quadratic equation, so it can be discarded. 
+When there is only one solution, the ray grazes an edge of the quadratic surface.
+In most cases, there will be two solutions for the equation; one intersection with the front of the surface and one with the back. 
+The smaller of the two values for $\mu$ corresponds to the front intersection, the larger one to the back. 
+It is only the smallest value that we will want to use, because typically the front surface occludes the back. 
+If the front surface is behind the image plane (e.g. the camera is inside the sphere), we could be able to see the back surface, but then
+we can also assume that back-face culling should be applied, and the ray can be discarded altogether.
+This reduces the choice between the two solutions to simply computing the smaller solution only.
+
+The resulting value of $\mu$ can be inserted directly into equation \ref{eqn:ray_eye} to obtain the surface point in eye-space.
+
+Since spheres are normalized in parameter-space, a surface point's position equals the surface normal at that position in parameter-space.
+With $\mu$, the parameter-space surface point and thus the surface normal can be determined. Transforming this normal using the inverse transpose
+of the variance-modelview matrix $({\bf M \cdot T})^{-T}$ yields the surface normal in eye-space.
+
+With both the surface position and normal known in eye-space, it is possible to evaluate a per-pixel shading model, such as the Phong shading model.
